@@ -1,0 +1,104 @@
+# ----------------------------------------
+# SETTINGS
+# ----------------------------------------
+TOP          = counter_top
+UCDB         = coverage.ucdb
+
+FUNC_DIR     = cov_func_html
+CODE_DIR     = cov_code_html
+COMBO_DIR    = cov_html
+
+FUNC_INDEX   = $(FUNC_DIR)/index.html
+CODE_INDEX   = $(CODE_DIR)/index.html
+COMBO_INDEX  = $(COMBO_DIR)/index.html
+
+# ----------------------------------------
+# HELP
+# ----------------------------------------
+help:
+	@echo ""
+	@echo "Coverage Makefile Commands"
+	@echo "--------------------------"
+	@echo "make compile     - Compile with full coverage enabled"
+	@echo "make run         - Run simulation and save UCDB"
+	@echo "make report      - Generate ALL reports (functional + code + combined)"
+	@echo "make func_report - Generate FUNCTIONAL coverage report"
+	@echo "make code_report - Generate CODE coverage report"
+	@echo "make combo_report- Generate combined full coverage report"
+	@echo "make view_func   - View functional coverage report"
+	@echo "make view_code   - View code coverage report"
+	@echo "make view_combo  - View combined report"
+	@echo "make clean       - Clean all generated files"
+	@echo ""
+
+# Default workflow
+all: clean compile run report view_combo
+
+# ----------------------------------------
+# COMPILE
+# ----------------------------------------
+compile:
+	vlib work
+	vmap work work
+	vlog +acc +cover=bcesft -work work counter.sv
+
+# ----------------------------------------
+# RUN (Create UCDB)
+# ----------------------------------------
+run:
+	vsim -coverage -c work.$(TOP) \
+		-do "log -r /*; run -all; coverage save -onexit $(UCDB); quit -f" \
+		-l sim.log
+
+# ----------------------------------------
+# FUNCTIONAL COVERAGE REPORT
+# (shows hit/miss for each bin)
+# ----------------------------------------
+func_report:
+	vcover report -html -cvg -details -nocompactcrossbins -directive -verbose \
+		-output $(FUNC_DIR) $(UCDB)
+
+# ----------------------------------------
+# CODE COVERAGE REPORT
+# ----------------------------------------
+code_report:
+	vcover report -html -codeAll -details -verbose \
+		-output $(CODE_DIR) $(UCDB)
+
+# ----------------------------------------
+# COMBINED REPORT
+# ----------------------------------------
+combo_report:
+	vcover report -html -codeAll -cvg -assert -details -verbose \
+		-output $(COMBO_DIR) $(UCDB)
+
+
+# ----------------------------------------
+# GENERATE ALL REPORTS
+# ----------------------------------------
+report: func_report code_report combo_report
+
+# ----------------------------------------
+# OPEN REPORTS
+# ----------------------------------------
+view_func:
+	@if [ -f $(FUNC_INDEX) ]; then \
+		xdg-open $(FUNC_INDEX) 2>/dev/null || true; \
+	else echo "Functional report missing! Run: make func_report"; fi
+
+view_code:
+	@if [ -f $(CODE_INDEX) ]; then \
+		xdg-open $(CODE_INDEX) 2>/dev/null || true; \
+	else echo "Code report missing! Run: make code_report"; fi
+
+view_combo:
+	@if [ -f $(COMBO_INDEX) ]; then \
+		xdg-open $(COMBO_INDEX) 2>/dev/null || true; \
+	else echo "Combined report missing! Run: make combo_report"; fi
+
+# ----------------------------------------
+# CLEAN
+# ----------------------------------------
+clean:
+	rm -rf work transcript* vsim.wlf sim.log $(UCDB) \
+		$(FUNC_DIR) $(CODE_DIR) $(COMBO_DIR)
