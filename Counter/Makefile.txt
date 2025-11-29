@@ -39,7 +39,7 @@ help:
 # ============================================================
 compile:
 	vlib work
-	vlog +acc +cover=bcesft test.sv
+	vlog +acc +cover=bcesft counter.sv
 
 
 # ============================================================
@@ -127,3 +127,4 @@ clean:
 	rm -rf work transcript* *.log vsim.wlf \
 		$(UCDB_DIR) $(MERGED) \
 		$(FUNC_DIR) $(CODE_DIR) $(ALL_DIR)
+
