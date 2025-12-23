@@ -9,7 +9,6 @@ input logic [3:0] data_in,data_out;
 
 property reset;
 	@(posedge clk)
-		//rst |=> data_out==0;
 		rst |-> data_out==0;
 endproperty
 
@@ -28,7 +27,6 @@ endproperty
 property load_data;
 	@(posedge clk)
 		disable iff(rst)
-			//load |=> data_out == data_in;	
 			load |-> data_out == data_in;	
 endproperty
 
@@ -51,10 +49,8 @@ a_rst : assert property (reset)
 
 a_up : assert property (up_count)
 		$display("Up Count Assertion Pass at",$time);
-		//$strobe("Up Count Assertion Pass at",$time);
 	else
 		$display("Up Count Assertion Fail at",$time);
-		//$strobe("Up Count Assertion Fail at",$time);
 
 a_down : assert property (down_count)
 		$display("Down Count Assertion Pass at",$time);
@@ -76,3 +72,4 @@ a_0_to_11 : assert property (lower_bound)
 	else
 		$display("Lower Bound Wraparound Assertion Fail at",$time);
 endmodule
+
