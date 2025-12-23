@@ -38,30 +38,4 @@ class counter_test extends uvm_test;
 
 endclass
 
-class extended_counter_test extends counter_test;
-
-	`uvm_component_utils(extended_counter_test);
-	
-	function new(string name = "extended_counter_test",uvm_component parent=null);
-		super.new(name,parent);
-	endfunction
-	
-	function void build_phase(uvm_phase phase);
-		super.build_phase(phase);
-	endfunction
-
-	function void start_of_simulation_phase(uvm_phase phase);
-		uvm_top.print_topology();
-	endfunction
-
-	task run_phase(uvm_phase phase);
-		extended_counter_sequence eseqh;
-		eseqh=extended_counter_sequence::type_id::create("extended_counter_sequence");
-		phase.raise_objection(this);
-			eseqh.start(envh.wagth.seqrh);
-		phase.drop_objection(this);
-	endtask
-
-endclass
-
 
