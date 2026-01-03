@@ -15,7 +15,7 @@ The SV folder contains 2 files :-
     11) test class of loadable mod-12 counter.
     12) package of loadable mod-12 counter.
     13) assertion module of loadable mod-12 counter.
-    14) top module of loadable mod-12 counter.
+    14) top tb module of loadable mod-12 counter.
 2) "Makefile" - this file is used to compile the program, run the program, perform regression testing, generate code, functional and combined coverage reports view these reports in firefox.
 
 The UVM folder contains 6 folders :-
