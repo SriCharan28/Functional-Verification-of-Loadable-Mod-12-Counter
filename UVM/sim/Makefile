@@ -1,4 +1,4 @@
-#Makefile for MOD-12 COUNTER
+#Makefile for LOADABLE UP-DOWN MOD-12 COUNTER
 
 # SIMULATOR = Questa for Mentor's Questasim
 
