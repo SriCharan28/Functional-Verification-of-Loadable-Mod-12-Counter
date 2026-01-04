@@ -8,7 +8,7 @@ class counter_wmon extends uvm_monitor;
 	counter_env_config cfg;
 	counter_trans th;
 
-	function new(string name = "counter_rmon",uvm_component parent);
+	function new(string name = "counter_wmon",uvm_component parent);
 		super.new(name,parent);
 	endfunction
 
@@ -43,5 +43,6 @@ class counter_wmon extends uvm_monitor;
 
 		wap.write(th);
 	endtask
+
 
 endclass
